@@ -26,8 +26,8 @@ def lucky(query):
 
     if q in id_cache:
         video_id = id_cache[q]
-        print 'Picked from cache for ' + q
-    else
+        print ('Picked from cache for ' + q)
+    else:
         request = youtube.search().list(
             part="snippet",
             q=q,
