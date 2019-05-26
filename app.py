@@ -12,4 +12,4 @@ def index():
     # We will just display our mailgun secret key, nothing more.
     return render_template("index.html", value=mailgun_secret_key_value)
 
-app.run(debug=True)
+#app.run(debug=True)
