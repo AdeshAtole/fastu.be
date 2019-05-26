@@ -5,8 +5,13 @@ import googleapiclient.discovery
 import googleapiclient.errors
 from flask import Flask, render_template, redirect
 
-app = Flask('MyHerokuApp')
+app = Flask('fastu.be')
+tang_api_key = os.environ['GOOG_API_KEY_YT']
 youtube_search_url = 'https://www.youtube.com/results?search_query='
+api_service_name = "youtube"
+api_version = "v3"
+youtube = googleapiclient.discovery.build(
+api_service_name, api_version, developerKey = tang_api_key)
 
 supported_separators_regex = re.compile(r'[.+= -,_]+')
 @app.route('/')
@@ -15,7 +20,14 @@ def index():
 
 @app.route('/<query>')
 def lucky(query):
-    return "hello " + query + ' ' + os.environ['ADESH'] 
+    q=re.sub(supported_separators_regex ,  ' ' , query)
+    request = youtube.search().list(
+        part="snippet",
+        q=q,
+        type="video"
+    )
+
+    return "hello " + query + ' ' + os.environ['ADESH']  + ' ' str(request.execute())
 
 
 
