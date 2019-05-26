@@ -27,8 +27,10 @@ def lucky(query):
         type="video"
     )
     response = request.execute()
-    
-    return "hello " + query + ' ' + os.environ['ADESH']  + ' ' + str(response['items'][0])
+    if len(response['items'] == 0){
+        return render_template("notfound.html")
+    }
+    return "hello " + query + ' ' + os.environ['ADESH']  + ' ' + str(response['items'][0]['id']['videoId'])
 
 
 
