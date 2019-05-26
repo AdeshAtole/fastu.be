@@ -1,5 +1,9 @@
 import os
 import re
+
+import google_auth_oauthlib.flow
+import googleapiclient.discovery
+import googleapiclient.errors
 from flask import Flask, render_template, redirect
 
 app = Flask('MyHerokuApp')
@@ -12,7 +16,7 @@ def index():
 
 @app.route('/<query>')
 def lucky(query):
-    return "hello " + query 
+    return "hello " + query + ' ' + os.environ['PORT'] 
 
 
 
