@@ -26,8 +26,9 @@ def lucky(query):
         q=q,
         type="video"
     )
-
-    return "hello " + query + ' ' + os.environ['ADESH']  + ' ' + str(request.execute())
+    response = request.execute()
+    
+    return "hello " + query + ' ' + os.environ['ADESH']  + ' ' + str(response['items'][0])
 
 
 
