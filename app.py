@@ -8,6 +8,7 @@ from flask import Flask, render_template, redirect
 app = Flask('fastube')
 tang_api_key = os.environ['GOOG_API_KEY_YT']
 youtube_search_url = 'https://www.youtube.com/results?search_query='
+youtube_video_url = 'https://www.youtube.com/watch?v='
 api_service_name = "youtube"
 api_version = "v3"
 youtube = googleapiclient.discovery.build(
@@ -30,7 +31,7 @@ def lucky(query):
     if len(response['items']) == 0:
         return render_template("notfound.html")
     
-    return "hello " + query + ' ' + os.environ['ADESH']  + ' ' + str(response['items'][0]['id']['videoId'])
+    return redirect(youtube_video_url +response['items'][0]['id']['videoId'], code=302 )
 
 
 
