@@ -15,7 +15,7 @@ def index():
 
 @app.route('/<query>')
 def lucky(query):
-    return "hello " + query + ' ' + os.environ['PORT'] 
+    return "hello " + query + ' ' + os.environ['ADESH'] 
 
 
 
