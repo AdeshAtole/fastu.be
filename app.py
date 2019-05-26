@@ -1,15 +1,25 @@
 import os
-from flask import Flask, render_template
+import re
+from flask import Flask, render_template, redirect
 
 app = Flask('MyHerokuApp')
+youtube_search_url = 'https://www.youtube.com/results?search_query='
 
-# We will set this up a bit later, do not worry if we leave it as None for now.
-mailgun_secret_key_value = None
-
+supported_separators_regex = re.compile(r'[.+= -,_]+')
 @app.route('/')
 def index():
+    return render_template("index.html")
+
+@app.route('/<query>')
+def lucky(query):
+    return "hello " + query 
+
+
+
+@app.route('/s/<query>')
+def search(query):
 
     # We will just display our mailgun secret key, nothing more.
-    return render_template("index.html", value=mailgun_secret_key_value)
-
+    # return redirect(youtube_search_url + re.sub(supported_separators_regex ,  '+' , query) , code=302)
+    return youtube_search_url + re.sub(supported_separators_regex ,  '+' , query)
 #app.run(debug=True)
