@@ -13,6 +13,7 @@ api_service_name = "youtube"
 api_version = "v3"
 youtube = googleapiclient.discovery.build(
 api_service_name, api_version, developerKey = tang_api_key)
+id_cache = {}
 
 supported_separators_regex = re.compile(r'[.+= -,_]+')
 @app.route('/')
@@ -22,16 +23,24 @@ def index():
 @app.route('/<query>')
 def lucky(query):
     q=re.sub(supported_separators_regex ,  ' ' , query)
-    request = youtube.search().list(
-        part="snippet",
-        q=q,
-        type="video"
-    )
-    response = request.execute()
-    if len(response['items']) == 0:
-        return render_template("notfound.html")
-    
-    return redirect(youtube_video_url +response['items'][0]['id']['videoId'], code=302 )
+
+    if q in id_cache:
+        video_id = id_cache[q]
+        print 'Picked from cache for ' + q
+    else
+        request = youtube.search().list(
+            part="snippet",
+            q=q,
+            type="video"
+        )
+        response = request.execute()
+        if len(response['items']) == 0:
+            return render_template("notfound.html")
+        video_id = response['items'][0]['id']['videoId']
+        id_cache[q] = video_id
+        print 'Picked from API for ' + q
+        
+    return redirect(youtube_video_url + video_id, code=302 )
 
 
 
