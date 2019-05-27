@@ -47,8 +47,8 @@ def lucky(query):
             video_id = response['items'][0]['id']['videoId']
             id_cache[q] = video_id
             print ('Picked from API for ' + q)
-        except e:
-            print e
+        except HttpError as he:
+            print he
         
     return redirect(youtube_video_url + video_id, code=302 )
 
