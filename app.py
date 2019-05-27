@@ -20,6 +20,10 @@ supported_separators_regex = re.compile(r'[.+= -,_]+')
 def index():
     return render_template("index.html")
 
+@app.route('/robots.txt')
+def robots():
+    return 'robot'
+
 @app.route('/<query>')
 def lucky(query):
     q=re.sub(supported_separators_regex ,  ' ' , query)
