@@ -3,9 +3,9 @@ import re
 
 import googleapiclient.discovery
 import googleapiclient.errors
-from flask import Flask, render_template, redirect
+from flask import Flask, render_template, redirect, make_response
 
-app = Flask('fastube', static_folder='static', static_url_path='')
+app = Flask('fastube')
 tang_api_key = os.environ['GOOG_API_KEY_YT']
 youtube_search_url = 'https://www.youtube.com/results?search_query='
 youtube_video_url = 'https://www.youtube.com/watch?v='
@@ -15,6 +15,7 @@ youtube = googleapiclient.discovery.build(
 api_service_name, api_version, developerKey = tang_api_key)
 id_cache = {}
 
+robots = open('static/robots.txt').read()
 supported_separators_regex = re.compile(r'[.+= -,_]+')
 @app.route('/')
 def index():
@@ -22,7 +23,9 @@ def index():
 
 @app.route('/robots.txt')
 def robots():
-    return 'robot'
+    response = make_response(robots)
+    response.headers["Content-type"] = "text/plain"
+    return response
 
 @app.route('/<query>')
 def lucky(query):
