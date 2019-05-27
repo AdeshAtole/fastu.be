@@ -5,7 +5,7 @@ import googleapiclient.discovery
 import googleapiclient.errors
 from flask import Flask, render_template, redirect
 
-app = Flask('fastube')
+app = Flask('fastube', static_folder='static', static_url_path='')
 tang_api_key = os.environ['GOOG_API_KEY_YT']
 youtube_search_url = 'https://www.youtube.com/results?search_query='
 youtube_video_url = 'https://www.youtube.com/watch?v='
