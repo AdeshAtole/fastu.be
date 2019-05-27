@@ -35,17 +35,20 @@ def lucky(query):
         video_id = id_cache[q]
         print ('Picked from cache for ' + q)
     else:
-        request = youtube.search().list(
-            part="snippet",
-            q=q,
-            type="video"
-        )
-        response = request.execute()
-        if len(response['items']) == 0:
-            return render_template("notfound.html")
-        video_id = response['items'][0]['id']['videoId']
-        id_cache[q] = video_id
-        print 'Picked from API for ' + q
+        try:
+            request = youtube.search().list(
+                part="snippet",
+                q=q,
+                type="video"
+            )
+            response = request.execute()
+            if len(response['items']) == 0:
+                return render_template("notfound.html")
+            video_id = response['items'][0]['id']['videoId']
+            id_cache[q] = video_id
+            print ('Picked from API for ' + q)
+        except e:
+            print e
         
     return redirect(youtube_video_url + video_id, code=302 )
 
