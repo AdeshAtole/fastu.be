@@ -15,7 +15,7 @@ youtube = googleapiclient.discovery.build(
 api_service_name, api_version, developerKey = tang_api_key)
 id_cache = {}
 
-robots = open('static/robots.txt').read()
+robots_txt = open('static/robots.txt').read()
 supported_separators_regex = re.compile(r'[.+= -,_]+')
 @app.route('/')
 def index():
@@ -23,7 +23,7 @@ def index():
 
 @app.route('/robots.txt')
 def robots():
-    response = make_response(robots)
+    response = make_response(robots_txt)
     response.headers["Content-type"] = "text/plain"
     return response
 
