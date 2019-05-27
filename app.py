@@ -37,6 +37,7 @@ def lucky(query):
     else:
         request = youtube.search().list(
             part="snippet",
+            maxResults=1,
             q=q,
             type="video"
         )
