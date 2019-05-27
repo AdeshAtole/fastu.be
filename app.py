@@ -46,8 +46,4 @@ def lucky(query):
 
 @app.route('/s/<query>')
 def search(query):
-
-    # We will just display our mailgun secret key, nothing more.
     return redirect(youtube_search_url + re.sub(supported_separators_regex ,  '+' , query) , code=302)
-    # return youtube_search_url + re.sub(supported_separators_regex ,  '+' , query)
-#app.run(debug=True)
