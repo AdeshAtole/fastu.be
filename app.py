@@ -12,7 +12,7 @@ youtube_video_url = 'https://www.youtube.com/watch?v='
 api_service_name = "youtube"
 api_version = "v3"
 youtube = googleapiclient.discovery.build(
-api_service_name, api_version, developerKey = tang_api_key)
+    api_service_name, api_version, developerKey=tang_api_key)
 id_cache = {}
 
 robots_txt = open('static/robots.txt').read()
@@ -21,15 +21,17 @@ supported_separators_regex = re.compile(r'[.+= -,_]+')
 def index():
     return render_template("index.html")
 
+
 @app.route('/robots.txt')
 def robots():
     response = make_response(robots_txt)
     response.headers["Content-type"] = "text/plain"
     return response
 
+
 @app.route('/<query>')
 def lucky(query):
-    q=re.sub(supported_separators_regex ,  ' ' , query)
+    q = re.sub(supported_separators_regex, ' ', query)
 
     if q in id_cache:
         video_id = id_cache[q]
@@ -47,11 +49,11 @@ def lucky(query):
         video_id = response['items'][0]['id']['videoId']
         id_cache[q] = video_id
         print ('Picked from API for ' + q)
-       
-    return redirect(youtube_video_url + video_id, code=302 )
 
+    return redirect(youtube_video_url + video_id, code=302)
 
 
 @app.route('/s/<query>')
 def search(query):
-    return redirect(youtube_search_url + re.sub(supported_separators_regex ,  '+' , query) , code=302)
+    return redirect(youtube_search_url +
+                    re.sub(supported_separators_regex, '+', query), code=302)
