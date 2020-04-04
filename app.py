@@ -5,6 +5,8 @@ import googleapiclient.discovery
 import googleapiclient.errors
 from flask import Flask, render_template, redirect, make_response
 
+from cachetools import cached, TTLCache
+
 app = Flask('fastube')
 tang_api_key = os.environ['GOOG_API_KEY_YT']
 youtube_search_url = 'https://www.youtube.com/results?search_query='
@@ -14,6 +16,8 @@ api_version = "v3"
 youtube = googleapiclient.discovery.build(
     api_service_name, api_version, developerKey=tang_api_key)
 id_cache = {}
+cache_ttl = 86400 #one day
+cache_max_items = 4194304
 
 robots_txt = open('static/robots.txt').read()
 supported_separators_regex = re.compile(r'[.+= -,_]+')
@@ -32,24 +36,22 @@ def robots():
 @app.route('/<query>')
 def lucky(query):
     q = re.sub(supported_separators_regex, ' ', query)
+    return fortunate(q)
 
-    if q in id_cache:
-        video_id = id_cache[q]
-        print ('Picked from cache for ' + q)
-    else:
-        request = youtube.search().list(
-            part="snippet",
-            maxResults=1,
-            q=q,
-            type="video"
-        )
-        response = request.execute()
-        if len(response['items']) == 0:
-            return render_template("notfound.html")
-        video_id = response['items'][0]['id']['videoId']
-        id_cache[q] = video_id
-        print ('Picked from API for ' + q)
 
+@cached(TTLCache(cache_max_items, cache_ttl))
+def fortunate(query):
+    request = youtube.search().list(
+    part="snippet",
+    maxResults=1,
+    q=query,
+    type="video"
+    )
+    response = request.execute()
+    if len(response['items']) == 0:
+        return render_template("notfound.html")
+    video_id = response['items'][0]['id']['videoId']
+    print('Picked from API for: ' + query)
     return redirect(youtube_video_url + video_id, code=302)
 
 
