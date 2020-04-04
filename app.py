@@ -16,8 +16,8 @@ api_version = "v3"
 youtube = googleapiclient.discovery.build(
     api_service_name, api_version, developerKey=tang_api_key)
 id_cache = {}
-cache_ttl = 86400 #one day
-cache_max_items = 4194304
+cache_ttl = int(1*24*60*60)
+cache_max_items = int(256*1024*1024/64)
 
 robots_txt = open('static/robots.txt').read()
 supported_separators_regex = re.compile(r'[.+= -,_]+')
